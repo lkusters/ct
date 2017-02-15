@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 					fprintf(stdout, "%lf", rate);
 					fwrite(" ", sizeof(char), 1, stdout);
 				#else
-					fprintf(stdout, "%lf\n", rate);
+					fprintf(stdout,"%lf\n", rate);
 				#endif
             } // if
 

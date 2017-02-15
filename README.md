@@ -16,3 +16,8 @@ awk '{if(++count%4==2) print $1}' data.txt | ./ctapply 2 model.bin > div.txt
 
 Examples:
 data.txt , model.bin
+
+==============================================
+Toelichting .sh files on cluster
+modelscreate.sh : create the models for file R1 and R2
+modelscombine.sh : combine the models for R1 and R2 and add reverse complement
