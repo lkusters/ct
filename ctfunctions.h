@@ -180,15 +180,23 @@ static inline size_t write_model(void)
 } // write_model
 
 // Load a probability table in binary form from stdin
+/*
 static inline void read_model(void)
 {
     size_t const read = fread(count, sizeof(count[0][0]), SIZE * 4, stdin);
-    if (read != SIZE * 4)
+	size_t helpvar;
+	size_t const readcheck = fread(&helpvar, sizeof(size_t), 1, stdin);
+
+	fprintf(stdout, "read: %zu\n", read);
+	fprintf(stdout, "SIZE: %zu\n", SIZE);
+	fprintf(stdout, "readcheck: %zu\n", readcheck);
+    if (read != SIZE * 4 || (readcheck!=0))
     {
         fprintf(stderr, "fread failed\n");
         exit(EXIT_FAILURE);
     } // if
 } // read_model
+*/
 
 // Load a count table in binary form from a file
 static inline void read_count_file(char *filename, size_t ccount[USIZE][4])
@@ -201,12 +209,19 @@ static inline void read_count_file(char *filename, size_t ccount[USIZE][4])
     } // if
 
     size_t const read = fread(ccount, sizeof(ccount[0][0]), SIZE * 4, file);
-    fclose(file);
-    if (read != SIZE * 4)
+	size_t helpvar;
+	size_t const readcheck = fread(&helpvar, sizeof(size_t), 1, file);
+    
+	// fprintf(stdout, "read: %zu\n", read);
+	// fprintf(stdout, "SIZE: %zu\n", SIZE);
+	// fprintf(stdout, "readcheck: %zu\n", readcheck);
+	
+    if ((read != SIZE * 4) || (readcheck!=0))
     {
 		fprintf(stderr, "fread failed\n");
 		exit(EXIT_FAILURE);
     } // if
+	fclose(file);
 } // read_model
 
 // add reverse complement to the input model counts
@@ -290,7 +305,6 @@ static inline double divergence(size_t const count[USIZE][4],
 		{
 			#if defined(DEBUG)
 				printkey(i);
-			
 			fwrite(" ", sizeof(char), 1, stdout);  			
 		#endif
 		for (size_t j = 0; j < 4; ++j)
