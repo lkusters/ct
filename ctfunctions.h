@@ -305,10 +305,9 @@ static inline double divergence(size_t const count[USIZE][4],
 		{
 			#if defined(DEBUG)
 				printkey(i);
-				fwrite(" ", sizeof(char), 1, stdout);
-			#endif
-			   			
-			for (size_t j = 0; j < 4; ++j)
+			fwrite(" ", sizeof(char), 1, stdout);  			
+		#endif
+		for (size_t j = 0; j < 4; ++j)
 			{        	
 				rate += static_cast<double>(count[i][j] ) * ( log2(static_cast<double>(count[i][j] + 1)) - log2(SUM) - prob[i][j]); // 
         	}
