@@ -253,6 +253,10 @@ static inline void complement(size_t ccount[USIZE][4])
 			#if defined(DEBUG)
 				printkey(kkey);
 				fwrite(" ", sizeof(char), 1, stdout);
+				fprintf(stdout, "%9ld", ccount[i][j]);
+				fwrite("+", sizeof(char), 1, stdout);
+				fprintf(stdout, "%9ld", ccount[kkey][idx]);
+				fwrite(" ", sizeof(char), 1, stdout);
 	    	#endif
 
 	    	if (kkey >= i)
