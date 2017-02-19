@@ -179,17 +179,17 @@ static inline size_t write_model(void)
     return fwrite(count[0], sizeof(count[0][0]), SIZE * 4, stdout);
 } // write_model
 
-// Load a probability table in binary form from stdin
 /*
+// Load a probability table in binary form from stdin
 static inline void read_model(void)
 {
     size_t const read = fread(count, sizeof(count[0][0]), SIZE * 4, stdin);
 	size_t helpvar;
 	size_t const readcheck = fread(&helpvar, sizeof(size_t), 1, stdin);
 
-	fprintf(stdout, "read: %zu\n", read);
-	fprintf(stdout, "SIZE: %zu\n", SIZE);
-	fprintf(stdout, "readcheck: %zu\n", readcheck);
+	// fprintf(stdout, "read: %zu\n", read);
+	// fprintf(stdout, "SIZE: %zu\n", SIZE);
+	// fprintf(stdout, "readcheck: %zu\n", readcheck);
     if (read != SIZE * 4 || (readcheck!=0))
     {
         fprintf(stderr, "fread failed\n");
@@ -275,16 +275,18 @@ static inline void complement(size_t ccount[USIZE][4])
 static inline void normalize(size_t const count[USIZE][4],
                              double       prob[USIZE][4])
 {
-    for (size_t i = 0; i < SIZE; ++i)
+	    
+	for (size_t i = 0; i < SIZE; ++i)
     {
-        double const SUM = static_cast<double>(count[i][0] + 1) +
-                           static_cast<double>(count[i][1] + 1) +
-                           static_cast<double>(count[i][2] + 1) +
-                           static_cast<double>(count[i][3] + 1);
-        prob[i][0] = log2(static_cast<double>(count[i][0] + 1) / SUM);
-        prob[i][1] = log2(static_cast<double>(count[i][1] + 1) / SUM);
-        prob[i][2] = log2(static_cast<double>(count[i][2] + 1) / SUM);
-        prob[i][3] = log2(static_cast<double>(count[i][3] + 1) / SUM);
+        double const SUM = static_cast<double>(count[i][0]) + .5 +
+                           static_cast<double>(count[i][1]) + .5 +
+                           static_cast<double>(count[i][2]) + .5 +
+                           static_cast<double>(count[i][3]) + .5;
+
+        prob[i][0] = log2((static_cast<double>(count[i][0]) + .5) / SUM);
+        prob[i][1] = log2((static_cast<double>(count[i][1]) + .5) / SUM);
+        prob[i][2] = log2((static_cast<double>(count[i][2]) + .5) / SUM);
+        prob[i][3] = log2((static_cast<double>(count[i][3]) + .5) / SUM);
     } // for
 } // normalize
 
@@ -294,29 +296,42 @@ static inline double divergence(size_t const count[USIZE][4],
 {
 	double SUMS;
 	SUMS = 0;
-	double rate;
-	rate = 0;    
+	double div;
+	div = 0;    
 	for (size_t i = 0; i < SIZE; ++i)
     {
 		      
-		double const SUM = static_cast<double>(count[i][0] ) +
-                           static_cast<double>(count[i][1] ) +
-                           static_cast<double>(count[i][2] ) +
-                           static_cast<double>(count[i][3] );
-		SUMS += SUM; // total SUM
+		double const SUM = static_cast<double>(count[i][0] ) +.5 +
+                           static_cast<double>(count[i][1] ) +.5 +
+                           static_cast<double>(count[i][2] ) +.5 +
+                           static_cast<double>(count[i][3] ) +.5;
+		SUMS += SUM-2; // total SUM
 		
-		if (SUM > 0)
+		if ((SUM-2) > 0) // context has occurred in test sequence
 		{
-			#if defined(DEBUG)
+			#if defined(DEBUG) 
 				printkey(i);
 			fwrite(" ", sizeof(char), 1, stdout);  			
 		#endif
 		for (size_t j = 0; j < 4; ++j)
 			{        	
-				rate += static_cast<double>(count[i][j] ) * ( log2(static_cast<double>(count[i][j] + 1)) - log2(SUM) - prob[i][j]); // 
+				double const probxc = (static_cast<double>(count[i][j]) + .5) / SUM;			
+				div += (SUM-2)* probxc * ( log2(static_cast<double>(count[i][j]) + .5) - log2(SUM) - prob[i][j]); // 
+				#if defined(DEBUG)
+					fprintf(stdout, "%9ld", count[i][j]);
+					fwrite("*(", sizeof(char), 2, stdout);
+ 					fprintf(stdout, "%lf", - prob[i][j]);
+					fwrite("-", sizeof(char), 1, stdout);
+					fprintf(stdout, "%lf", -log2(static_cast<double>(count[i][j]) + .5 ) + log2(SUM));
+					fwrite(")  ", sizeof(char), 3, stdout);
+				#endif
         	}
+			#if defined(DEBUG)
+				fwrite("\n", sizeof(char), 1, stdout);  			
+		#endif
 		}
 		
+		
     } // for
-	return rate/SUMS;
+	return div/SUMS;
 } // Divergence

@@ -4,6 +4,7 @@ awk '{if(++count%4==2) print $1}' data.txt | ./ctmodel 2 > model.bin
 
 construct program from .cc:
 gcc -DDEBUG -o ctmodel ctmodel.cc -lm
+see also makefile
 
 ctprint : print a model
 ./ctprint 2 model.bin
@@ -22,8 +23,9 @@ awk '{if(++count%4==2) print $1}' data.txt | ./ctapply 2 model.bin > div.txt
 # not used: ctdiv2hist : convert divergence values to histogram
 { cat divs.txt | awk '{s+=$1}END{print s/NR}' ; cat divs.txt; } | ./ctdiv2hist
 
-Examples:
-data.txt , model.bin
+Testfile
+./cttest.sh : for testing the functions (output model.bin , modelrev.bin )
+example data: dataAA.fastq , example.fastq
 
 ==============================================
 Toelichting .sh files on cluster

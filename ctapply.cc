@@ -19,7 +19,9 @@ static size_t model[USIZE][4] = {{0}};
 
 int main(int argc, char *argv[])
 {
-
+	#if defined(DEBUG)
+		fwrite("---- DEBUG mode ---- \n", sizeof(char), strlen("---- DEBUG mode ---- \n"), stdout);
+	#endif    
     if (argc < 3)
     {
         fprintf(stderr, "usage: %s K Model data\n", argv[0]);
@@ -71,14 +73,11 @@ int main(int argc, char *argv[])
     } // while
 
 #if defined(DEBUG)
-    fwrite("Apply model\n", sizeof(char), strlen("Construct model\n"), stdout);
+    fwrite("Apply model\n", sizeof(char), strlen("Apply model\n"), stdout);
     fwrite("tree depth: ", sizeof(char), strlen("tree depth: "), stdout);
     fwrite(argv[1], sizeof(char), strlen(argv[1]), stdout);
-    //fwrite(argv[2], sizeof(char), strlen(argv[2]), stdout);
-    //fwrite(argv[3], sizeof(char), strlen(argv[3]), stdout);
     fwrite("\n", sizeof(char), 1, stdout);
     print_model(modelprob);
-    
 #endif
 } // main
 
