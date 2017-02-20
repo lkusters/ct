@@ -8,7 +8,7 @@ data <- read.table(f)
 ## use scan function ipv read, hoping that it will solve large file size issue
 ##data <- scan(file, what=double())
 ##print(dim(data))
-h <- hist(data[,1])
+h <- hist(data[,1],breaks=seq(0,3,by=0.01))
 cat(h$breaks, "\n")
 cat(h$counts, "\n")
 
