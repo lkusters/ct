@@ -148,15 +148,15 @@ static inline size_t accumulateN(char const* const string,
 } // accumulateN
 
 
-static inline void print_count(void)
+static inline void print_count(size_t const count1[USIZE][4])
 {
     for (size_t i = 0; i < SIZE; ++i)
     {
         printkey(i);
-        fprintf(stdout, ": %9ld %9ld %9ld %9ld\n", count[i][0],
-                                                   count[i][1],
-                                                   count[i][2],
-                                                   count[i][3]);
+        fprintf(stdout, ": %9ld %9ld %9ld %9ld\n", count1[i][0],
+                                                   count1[i][1],
+                                                   count1[i][2],
+                                                   count1[i][3]);
     } // for
 } // print_count
 

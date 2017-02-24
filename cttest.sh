@@ -79,7 +79,9 @@ echo "./ctapply"
 echo "===================="
 echo "OUT"
 # gcc -DDEBUG -o ctapply ctapply.cc -lm
-echo "GAG" | ./ctapply $K modelrev.bin | xargs echo -e "\e[1m"
+echo "GAG" | ./ctapply $K 0 modelrev.bin | xargs echo -e "\e[1m"
+echo -e "\e[0m"
+echo "GAG" | ./ctapply $K 1 modelrev.bin | xargs echo -e "\e[1m"
 echo -e "\e[0mTRUTH"
 echo -e "count : AG  0   0    1     0
 p     : AG 1/6  1/6  1/2   1/6
@@ -87,7 +89,9 @@ q     : AG 1/20 1/20 17/20 1/20
 SUM p*log2(p/q) = \e[1m0.4857\e[0m
 SUM log2(p/q) = \e[1m-0.766\e[0m"
 echo "OUT"
-echo -e "AGG" | ./ctapply $K modelrev.bin | xargs echo -e "\e[1m"
+echo -e "AGG" | ./ctapply $K 0 modelrev.bin | xargs echo -e "\e[1m"
+echo -e "\e[0m"
+echo -e "AGG" | ./ctapply $K 1 modelrev.bin | xargs echo -e "\e[1m"
 echo -e "\e[0mTRUTH"
 echo -e "count : GA  0   0    1     0
 p     : GA 1/6  1/6  1/2   1/6
@@ -95,21 +99,31 @@ q     : GA 1/24 1/24 21/24 1/24
 SUM p*log2(p/q) = \e[1m0.5963\e[0m
 SUM log2(p/q) = \e[1m-0.807\e[0m"
 echo "OUT"
-echo -e "CCT" | ./ctapply $K modelrev.bin | xargs echo -e "\e[1m"
+echo -e "CCT" | ./ctapply $K 0 modelrev.bin | xargs echo -e "\e[1m"
+echo -e "\e[0m"
+echo -e "CCT" | ./ctapply $K 1 modelrev.bin | xargs echo -e "\e[1m"
 echo -e "\e[0mTRUTH"
 echo -e "CCT : SUM p*log2(p/q) = \e[1m0.5963\e[0m"
 echo -e "CCT : SUM log2(p/q) = \e[1m-0.807\e[0m"
 echo "OUT"
-echo -e "TCC" | ./ctapply $K modelrev.bin | xargs echo -e "\e[1m"
+echo -e "TCC" | ./ctapply $K 0 modelrev.bin | xargs echo -e "\e[1m"
+echo -e "\e[0m"
+echo -e "TCC" | ./ctapply $K 1 modelrev.bin | xargs echo -e "\e[1m"
 echo -e "\e[0mTRUTH"
 echo -e "TCC : SUM p*log2(p/q) = \e[1m0.4857\e[0m"
 echo -e "TCC : SUM log2(p/q) = \e[1m-0.766\e[0m"
-# gcc -o ctapply ctapply.cc -lm
+# gcc -DDEBUG -o ctapply ctapply.cc -lm
 # FINAL CHECK
 echo "Apply to self, so should be close to 0 div and both values the same"
 echo "OUT"
 echo "CCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCT
 AGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGG" | ./ctmodel $K > model.bin
 echo "CCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCT
-AGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGG" | ./ctapply $K model.bin
+AGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGG" | ./ctapply $K 0 model.bin
+echo "CCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCT
+AGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGG" | ./ctapply $K 1 model.bin
+echo "CCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCT
+AGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGG" | ./ctapply $K 2 model.bin
+echo "CCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCTCCT
+AGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGGAGG" | ./ctapply $K 3 model.bin
 

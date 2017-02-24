@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     //fwrite(argv[3], sizeof(char), strlen(argv[3]), stdout);
     fwrite("\n", sizeof(char), 1, stdout);
 #endif
-	print_count();
+	print_count(count);
     
 } // main
 

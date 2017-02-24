@@ -14,7 +14,8 @@ INPUT : input data
 #include <cstring>
 #include "ctfunctions.h"
 
-static double modelprob[USIZE][4] = {{0}};
+static size_t DIV = 0;
+
 static size_t model[USIZE][4] = {{0}};
 
 int main(int argc, char *argv[])
@@ -22,9 +23,14 @@ int main(int argc, char *argv[])
 	#if defined(DEBUG)
 		fwrite("---- DEBUG mode ---- \n", sizeof(char), strlen("---- DEBUG mode ---- \n"), stdout);
 	#endif    
-    if (argc < 3)
+    if (argc < 4)
     {
-        fprintf(stderr, "usage: %s K Model data\n", argv[0]);
+        fprintf(stderr, "usage: %s K DIV Model data\nK: model depth\n\
+DIV:\n\
+0: Divergence D(seq||model) -> 1/N SUM n(c) SUM P(a|c) log( P(a|c) / M(a|c) )\n\
+1: Divergence estimate D(seq||model) -> 1/N SUM n(a|c) log( P(a|c) / M(a|c) )\n\
+2: Divergence D(model||seq)\n\
+3: Divergence estimate D(model||seq)\n", argv[0]);
         return EXIT_FAILURE;
     } // if
 
@@ -36,11 +42,9 @@ int main(int argc, char *argv[])
         fprintf(stderr, "K = %ld is too large\n", K);
         return EXIT_FAILURE;
     } // if
-
+	DIV = atoi(argv[2]);
 	
-	read_count_file(argv[2], model);
-	// convert to probabilities
-	//normalize(model, modelprob);
+	read_count_file(argv[3], model);
 
     // code for loading multiple strings
     ssize_t read = 0;
@@ -57,11 +61,32 @@ int main(int argc, char *argv[])
             if (here != 0)
             {
                 size_t const len = strlen(here) - 1;
+				double rate;
                 accumulateN(here, len);  // add to model
 				//complement(count);
 				// apply algorithm
-				//double const rate = divergence(count, model);
-				double const rate = divergenceEst(count, model);
+				switch(DIV) {
+				
+					case 0 :
+						rate = divergence(count, model);
+						break;
+
+					case 1 :
+						rate = divergenceEst(count, model);
+						break;
+
+					case 2 :
+						rate = divergence(model, count);
+						break;
+
+					case 3 :
+						rate = divergenceEst(model, count);
+						break;
+
+					default :
+						fprintf(stderr, "DIV = %ld is invalid\n", DIV);
+						return EXIT_FAILURE;
+				}
 
 				#if defined(DEBUG)
 					fprintf(stdout, "%lf", rate);
@@ -80,7 +105,8 @@ int main(int argc, char *argv[])
     fwrite("tree depth: ", sizeof(char), strlen("tree depth: "), stdout);
     fwrite(argv[1], sizeof(char), strlen(argv[1]), stdout);
     fwrite("\n", sizeof(char), 1, stdout);
-    print_model(modelprob);
+    print_count(model);
+	print_count(count);
 #endif
 } // main
 
