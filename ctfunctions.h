@@ -335,3 +335,56 @@ static inline double divergence(size_t const count[USIZE][4],
     } // for
 	return div/SUMS;
 } // Divergence
+
+// Calculate Divergence estimate
+static inline double divergenceEst(size_t const count1[USIZE][4],
+                             size_t const  count2[USIZE][4])
+{
+	double SUMS;
+	SUMS = 0;
+	double div;
+	div = 0;    
+	for (size_t i = 0; i < SIZE; ++i)
+    {
+		      
+		double const SUM1 = static_cast<double>(count1[i][0] ) +.5 +
+                           static_cast<double>(count1[i][1] ) +.5 +
+                           static_cast<double>(count1[i][2] ) +.5 +
+                           static_cast<double>(count1[i][3] ) +.5;
+		SUMS += SUM1-2; // total SUM
+		
+		if ((SUM1-2) > 0) // context has occurred in test sequence
+		{
+			#if defined(DEBUG) 
+				printkey(i);
+				fwrite(" ", sizeof(char), 1, stdout);  			
+			#endif
+		double const SUM2 = static_cast<double>(count2[i][0] ) +.5 +
+                            static_cast<double>(count2[i][1] ) +.5 +
+                            static_cast<double>(count2[i][2] ) +.5 +
+                            static_cast<double>(count2[i][3] ) +.5;
+
+		for (size_t j = 0; j < 4; ++j)
+			{        	
+				double const prob1 = log2((static_cast<double>(count1[i][j]) + .5) / SUM1);
+				double const prob2 = log2((static_cast<double>(count2[i][j]) + .5) / SUM2);
+												
+				div += (SUM1-2)* ( prob1 - prob2); // 
+				#if defined(DEBUG)
+					fprintf(stdout, "%lf", (SUM1-2) );
+					fwrite("*(", sizeof(char), 2, stdout);
+ 					fprintf(stdout, "%lf", - prob1);
+					fwrite("-", sizeof(char), 1, stdout);
+					fprintf(stdout, "%lf", prob2;
+					fwrite(")  ", sizeof(char), 3, stdout);
+				#endif
+        	}
+			#if defined(DEBUG)
+				fwrite("\n", sizeof(char), 1, stdout);  			
+			#endif
+		}
+		
+		
+    } // for
+	return div/SUMS;
+} // Divergence estimate

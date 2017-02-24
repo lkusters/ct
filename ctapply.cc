@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 	
 	read_count_file(argv[2], model);
 	// convert to probabilities
-	normalize(model, modelprob);
+	//normalize(model, modelprob);
 
     // code for loading multiple strings
     ssize_t read = 0;
@@ -60,7 +60,9 @@ int main(int argc, char *argv[])
                 accumulateN(here, len);  // add to model
 				//complement(count);
 				// apply algorithm
-				double const rate = divergence(count, modelprob);
+				//double const rate = divergence(count, modelprob);
+				double const rate = divergenceEst(count, model);
+
 				#if defined(DEBUG)
 					fprintf(stdout, "%lf", rate);
 					fwrite(" ", sizeof(char), 1, stdout);
