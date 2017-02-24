@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
             {
                 size_t const len = strlen(here) - 1;
                 accumulateN(here, len);  // add to model
-				complement(count);
+				//complement(count);
 				// apply algorithm
 				double const rate = divergence(count, modelprob);
 				#if defined(DEBUG)
