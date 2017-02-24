@@ -79,27 +79,31 @@ echo "./ctapply"
 echo "===================="
 echo "OUT"
 # gcc -DDEBUG -o ctapply ctapply.cc -lm
-echo "GAG" | ./ctapply $K modelrev.bin
-echo "TRUTH"
-echo "count : AG  0   0    1     0
+echo "GAG" | ./ctapply $K modelrev.bin | xargs echo -e "\e[1m"
+echo -e "\e[0mTRUTH"
+echo -e "count : AG  0   0    1     0
 p     : AG 1/6  1/6  1/2   1/6
 q     : AG 1/20 1/20 17/20 1/20
-p*log2(p/q) = 0.4857"
+SUM p*log2(p/q) = \e[1m0.4857\e[0m
+SUM log2(p/q) = \e[1m-0.766\e[0m"
 echo "OUT"
-echo "AGG" | ./ctapply $K modelrev.bin
-echo "TRUTH"
-echo "count : GA  0   0    1     0
+echo -e "AGG" | ./ctapply $K modelrev.bin | xargs echo -e "\e[1m"
+echo -e "\e[0mTRUTH"
+echo -e "count : GA  0   0    1     0
 p     : GA 1/6  1/6  1/2   1/6
 q     : GA 1/24 1/24 21/24 1/24
-p*log2(p/q) = 0.5963"
+SUM p*log2(p/q) = \e[1m0.5963\e[0m
+SUM log2(p/q) = \e[1m-0.807\e[0m"
 echo "OUT"
-echo "CCT" | ./ctapply $K modelrev.bin
-echo "TRUTH"
-echo "CCT : p*log2(p/q) = 0.5963"
+echo -e "CCT" | ./ctapply $K modelrev.bin | xargs echo -e "\e[1m"
+echo -e "\e[0mTRUTH"
+echo -e "CCT : SUM p*log2(p/q) = \e[1m0.5963\e[0m"
+echo -e "CCT : SUM log2(p/q) = \e[1m-0.807\e[0m"
 echo "OUT"
-echo "TCC" | ./ctapply $K modelrev.bin
-echo "TRUTH"
-echo "TCC : p*log2(p/q) = 0.4857"
+echo -e "TCC" | ./ctapply $K modelrev.bin | xargs echo -e "\e[1m"
+echo -e "\e[0mTRUTH"
+echo -e "TCC : SUM p*log2(p/q) = \e[1m0.4857\e[0m"
+echo -e "TCC : SUM log2(p/q) = \e[1m-0.766\e[0m"
 # gcc -o ctapply ctapply.cc -lm
 # FINAL CHECK
 echo "Apply to self, so should be close to 0 div and both values the same"

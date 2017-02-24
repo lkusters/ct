@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
                 accumulateN(here, len);  // add to model
 				//complement(count);
 				// apply algorithm
-				//double const rate = divergence(count, modelprob);
+				//double const rate = divergence(count, model);
 				double const rate = divergenceEst(count, model);
 
 				#if defined(DEBUG)
