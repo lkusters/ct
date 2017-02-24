@@ -13,6 +13,8 @@ INPUT : input data
 #include <cstring>
 #include "ctfunctions.h"
 
+static double modelprob[USIZE][4] = {{0.0}};
+
 
 int main(int argc, char *argv[])
 {
@@ -37,7 +39,7 @@ int main(int argc, char *argv[])
     } // if
 
 	read_count_file(argv[2], count);
-
+	normalize(count,modelprob);
 
 #if defined(DEBUG)
     fwrite("Print counts\n", sizeof(char), strlen("Print counts\n"), stdout);
@@ -47,7 +49,10 @@ int main(int argc, char *argv[])
     //fwrite(argv[3], sizeof(char), strlen(argv[3]), stdout);
     fwrite("\n", sizeof(char), 1, stdout);
 #endif
+	fwrite("counts\n", sizeof(char), strlen("counts\n"), stdout);
 	print_count(count);
+	fwrite("probs\n", sizeof(char), strlen("probs\n"), stdout);
+	print_model(modelprob);
     
 } // main
 
