@@ -26,6 +26,10 @@ DIV: Divergence estimation method
 2: Divergence D(model||seq)
 3: Divergence estimate D(model||seq)\n", argv[0]);
 
+ctrates : apply the model (calculate rates)
+echo "AAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCCCCCCCCCCAAA"|./ctrates K model.bin
+Will give as output R(X|MX) R(X|MY) R(Y|MX) R(Y|MY), with X the sequence and Y the model sequence
+
 # not used: ctdiv2hist : convert divergence values to histogram
 { cat divs.txt | awk '{s+=$1}END{print s/NR}' ; cat divs.txt; } | ./ctdiv2hist
 

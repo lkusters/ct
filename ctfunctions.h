@@ -397,3 +397,57 @@ static inline double divergenceEst(size_t const count1[USIZE][4],
     } // for
 	return div/SUMS;
 } // Divergence estimate
+// Calculate compression rates R(X|MX) R(X|MY) R(Y|MX) R(Y|MY)
+static inline void calcrates(size_t const count1[USIZE][4],
+                             size_t const  count2[USIZE][4],
+							double rates[4])
+{
+	double SUMS1;
+	SUMS1 = 0;
+	double SUMS2;
+	SUMS2 = 0;
+	rates[0]=0;rates[1]=0;rates[2]=0;rates[3]=0;
+   
+	for (size_t i = 0; i < SIZE; ++i)
+    {
+		      
+		double const SUM1 = static_cast<double>(count1[i][0] ) +.5 +
+                           static_cast<double>(count1[i][1] ) +.5 +
+                           static_cast<double>(count1[i][2] ) +.5 +
+                           static_cast<double>(count1[i][3] ) +.5;
+		SUMS1 += SUM1-2; // total SUM
+
+		double const SUM2 = static_cast<double>(count2[i][0] ) +.5 +
+                            static_cast<double>(count2[i][1] ) +.5 +
+                            static_cast<double>(count2[i][2] ) +.5 +
+                            static_cast<double>(count2[i][3] ) +.5;
+		SUMS2 += SUM2-2; // total SUM
+
+		
+		for (size_t j = 0; j < 4; ++j)
+			{        	
+								
+				double const lprob1 = log2((static_cast<double>(count1[i][j]) + .5) / SUM1);
+				double const lprob2 = log2((static_cast<double>(count2[i][j]) + .5) / SUM2);
+				// R(X|MX)
+				rates[0] -= count1[i][j]*lprob1;
+				// R(X|MY)
+				rates[1] -= count1[i][j]*lprob2;
+				// R(Y|MX)
+				rates[2] -= count2[i][j]*lprob1;
+				// R(Y|MY)
+				rates[3] -= count2[i][j]*lprob2;
+												
+        	} // for i
+
+    } // for j
+	#if defined(DEBUG)
+	fprintf(stdout, "%lf %lf %lf\n", rates[0], SUMS1,rates[0] / SUMS1);
+	fprintf(stdout, "%lf %lf %lf\n", rates[1], SUMS1,rates[1] / SUMS1);
+	fprintf(stdout, "%lf %lf %lf\n", rates[2], SUMS2,rates[2] / SUMS2);
+	fprintf(stdout, "%lf %lf %lf\n", rates[3], SUMS2,rates[3] / SUMS2);
+	#endif
+	rates[0] = rates[0] / SUMS1;rates[1] = rates[1] / SUMS1;
+	rates[2] = rates[2] / SUMS2;rates[3] = rates[3] / SUMS2;
+
+} // calcrates()
